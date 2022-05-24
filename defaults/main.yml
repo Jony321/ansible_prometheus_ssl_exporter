@@ -14,7 +14,5 @@ ssl_exporter_version: '2.4.1'
 ssl_exporter_arch: linux_amd64
 ssl_exporter_metrics_path: metrics
 ssl_exporter_user: ssl_exporter
-
-
-
+ssl_exporter_config: ""
   
