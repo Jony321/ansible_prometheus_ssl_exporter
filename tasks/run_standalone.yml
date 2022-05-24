@@ -1,0 +1,66 @@
+---
+- name: Get ssl exporter
+  become: true
+  become_user: root
+  get_url:
+    url:  "https://github.com/ribbybibby/ssl_exporter/releases/download/v{{ ssl_exporter_version }}/ssl_exporter_{{ ssl_exporter_version }}_{{ ssl_exporter_arch }}.tar.gz"
+    dest: "{{ ssl_exporter_config_dir }}/sources/ssl_exporter-{{ ssl_exporter_version }}.{{ ssl_exporter_arch }}.tar.gz"
+    mode:  0644
+    owner: root
+    group: root
+
+- name: Unzip ssl exporter
+  become: true
+  become_user: root
+  unarchive:
+    remote_src: yes
+    src: "{{ ssl_exporter_config_dir }}/sources/ssl_exporter-{{ ssl_exporter_version }}.{{ ssl_exporter_arch }}.tar.gz"
+    dest: "{{ ssl_exporter_config_dir}}/sources/"
+    creates: "{{ ssl_exporter_config_dir }}/sources/ssl_exporter-{{ ssl_exporter_version }}.{{ ssl_exporter_arch }}/ssl_exporter"
+
+- name: Copy exporter to PATH
+  become: true
+  become_user: root
+  copy:
+    remote_src: yes
+    src: "{{ ssl_exporter_config_dir }}/sources/ssl_exporter"
+    dest: /usr/local/bin/ssl_exporter
+    mode: 0755
+    owner: root
+    group: root
+  notify:
+   - Restart ssl exporter
+
+- name: Create ssl exporter user
+  user:
+    name: "{{ ssl_exporter_user }}"
+    comment: "ssl exporter user"
+    shell: /usr/sbin/nologin
+
+- name: Exporters | ssl exporter | Ensure ssl exporter systemd unit
+  become: true
+  become_user: root
+  template:
+    src: systemd.service.j2
+    dest: "/etc/systemd/system/ssl-exporter.service"
+    owner: root
+    group: root
+    mode: 0644
+  register: systemd_unitfile
+  notify:
+   - Restart ssl exporter
+
+- name: Exporters | ssl exporter | Enable systemd systemd.service
+  become: true
+  become_user: root
+  systemd:
+    name: "ssl-exporter.service"
+    enabled: yes
+    daemon_reload: yes
+    state: started
+  when:
+   - systemd_unitfile.changed
+
+
+
+

@@ -1,0 +1,23 @@
+---
+- name: Start docker ssl_exporter container
+  community.docker.docker_compose:
+    state: present
+    project_name: prometheus_ssl_exporter
+    definition:
+      version: '3.3'
+      services:
+        ssl_exporter:
+          image: "{{ ssl_exporter_docker_image }}"
+          command: "--config.file=/config/config.yml"
+          container_name: "{{ ssl_exporter_container_name }}"
+          ports:
+            - "127.0.0.1:{{ ssl_exporter_host_port }}:{{ ssl_exporter_host_port }}"
+          volumes:
+            - "{{ ssl_exporter_config_dir }}:/config"
+          hostname: "{{ ansible_host }}"
+          restart: always
+          labels: "{{ ssl_exporter_docker_labels }}"
+      networks:
+        default:
+          external: 
+             name: "{{ ssl_exporter_docker_network_name }}"

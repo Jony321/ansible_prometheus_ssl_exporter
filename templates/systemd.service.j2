@@ -1,0 +1,15 @@
+[Unit]
+Description=SSL exporter service
+After=network.target
+
+[Service]
+User={{ ssl_exporter_user }}
+Group={{ ssl_exporter_user }}
+ExecStart=/usr/local/bin/ssl_exporter --config.file={{ ssl_exporter_config_dir }}/config.yml --web.listen-address="{{ ssl_exporter_host_address }}:{{ ssl_exporter_host_port }}"
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+Restart=on-failure
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target
