@@ -14,23 +14,5 @@ ssl_exporter_version: '2.4.1'
 ssl_exporter_arch: linux_amd64
 ssl_exporter_metrics_path: metrics
 ssl_exporter_user: ssl_exporter
-ssl_exporter_config: 
-  http_2xx:
-    prober: http
-    timeout: 5s
-    http:
-      method: GET
-      valid_status_codes: []  # Defaults to 2xx
-      valid_http_versions: ["HTTP/1.1", "HTTP/2"]
-      preferred_ip_protocol: "ip4"
-      no_follow_redirects: false
-      fail_if_ssl: false
-      fail_if_not_ssl: false
-  icmp:
-    prober: icmp
-    timeout: 5s
-    icmp:
-      preferred_ip_protocol: "ip4"
-  tcp_ports:
-    prober: tcp
-    timeout: 3s
+ssl_exporter_config: ''
+ 
