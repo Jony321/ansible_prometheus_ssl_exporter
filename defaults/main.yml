@@ -1,9 +1,9 @@
 ---
 ssl_exporter_config_dir: /var/lib/ssl_exporter
-ssl_exporter_run_in_docker: true
+ssl_exporter_run_in_docker: false
+ssl_exporter_docker_image: "ribbybibby/ssl-exporter:2.4.1"
 ssl_exporter_docker_network_name: prom_network
 ssl_exporter_container_name: ssl_exporter
-ssl_exporter_docker_image: "ribbybibby/ssl-exporter:2.4.1"
 ssl_exporter_docker_labels:
   - prometheus
   - exporter
@@ -16,3 +16,4 @@ ssl_exporter_metrics_path: metrics
 ssl_exporter_user: ssl_exporter
 ssl_exporter_config: ''
  
+  
