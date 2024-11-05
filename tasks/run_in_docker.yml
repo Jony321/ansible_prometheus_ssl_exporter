@@ -1,10 +1,9 @@
 ---
 - name: Start docker ssl_exporter container
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     state: present
     project_name: prometheus_ssl_exporter
     definition:
-      version: '3.3'
       services:
         ssl_exporter:
           image: "{{ ssl_exporter_docker_image }}"
@@ -19,5 +18,5 @@
           labels: "{{ ssl_exporter_docker_labels }}"
       networks:
         default:
-          external: 
-             name: "{{ ssl_exporter_docker_network_name }}"
+          external: true
+          name: "{{ ssl_exporter_docker_network_name }}"
